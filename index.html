@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Data AquaTech</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              900: '#0f172a',
+              accent: '#06b6d4',
+            }
+          },
+          animation: {
+            'blob': 'blob 7s infinite',
+            'fade-in': 'fadeIn 0.5s ease-out forwards',
+            'pulse-glow': 'pulseGlow 2s infinite'
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: '1', filter: 'drop-shadow(0 4px 6px rgba(14, 165, 233, 0.3))' },
+              '50%': { opacity: '0.8', filter: 'drop-shadow(0 10px 15px rgba(14, 165, 233, 0.5))' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4 relative overflow-x-hidden text-slate-800 antialiased font-sans">
+
+  <!-- Efek Dekorasi Latar Belakang -->
+  <div class="fixed top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-100 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob"></div>
+    <div class="absolute top-[20%] right-[-5%] w-80 h-80 bg-cyan-100 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob" style="animation-delay: 2s"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-5xl mx-auto my-8">
+    <div class="bg-white/90 backdrop-blur-xl border border-white rounded-3xl p-6 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] flex flex-col min-h-[600px]">
+    
+      <div class="text-center mb-8">
+        <div class="inline-flex justify-center items-center w-16 h-16 bg-white rounded-2xl border border-brand-100 shadow-lg mb-4 animate-pulse-glow">
+          <i class="fa-solid fa-fish-fins text-2xl text-brand-600"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-brand-900 tracking-tight mb-6">AquaTech <span class="text-brand-600">Portal</span></h2>
+        
+        <div class="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner">
+          <button id="tabFormBtn" onclick="switchTab('form')" class="px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 bg-white text-brand-600 shadow-sm">
+            Input Data
+          </button>
+          <button id="tabDataBtn" onclick="switchTab('data')" class="px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 text-slate-500 hover:text-slate-700">
+            Database UMKM
+          </button>
+        </div>
+      </div>
+
+      <!-- TAMPILAN: FORM INPUT -->
+      <div id="viewForm" class="animate-fade-in w-full max-w-4xl mx-auto">
+        <form id="produkForm" class="space-y-6">
+            <div class="p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
+              <h3 class="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-3 mb-5 flex items-center">
+                <i class="fa-solid fa-shop text-brand-500 mr-2"></i>Informasi Bisnis
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="space-y-1">
+                  <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Nama Usaha / Brand</label>
+                  <input type="text" id="namaUsaha" placeholder="Nama Brand Anda" required class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-brand-500 transition-all">
+                </div>
+                <div class="space-y-1">
+                  <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Nama Pemilik</label>
+                  <input type="text" id="namaPemilik" placeholder="Nama Lengkap" required class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-brand-500 transition-all">
+                </div>
+                <div class="space-y-1">
+                  <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">No. WhatsApp</label>
+                  <input type="tel" id="whatsapp" placeholder="Contoh: 08123..." required class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-brand-500 transition-all">
+                </div>
+                <div class="space-y-1">
+                  <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Kategori</label>
+                  <select id="kategori" required class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-brand-500 appearance-none cursor-pointer">
+                    <option value="" disabled selected>Pilih Kategori</option>
+                    <option value="Makanan & Minuman">Makanan & Minuman</option>
+                    <option value="Budidaya & Perikanan">Budidaya & Perikanan</option>
+                    <option value="Jasa & Layanan">Jasa & Layanan</option>
+                  </select>
+                </div>
+                
+                <!-- TAMBAHAN: UPLOAD FOTO/POSTER -->
+                <div class="space-y-1 sm:col-span-2 mt-2">
+                  <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Upload Poster/Foto Usaha (Opsional)</label>
+                  <input type="file" id="fotoPoster" accept="image/png, image/jpeg, image/jpg" class="w-full bg-white border border-slate-200 rounded-xl py-2 px-4 outline-none focus:border-brand-500 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 text-sm">
+                  <p class="text-[10px] text-slate-400 mt-1">*Maksimal ukuran file 3MB. Format: JPG, PNG.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
+              <h3 class="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-3 mb-4 flex items-center">
+                <i class="fa-solid fa-tags text-brand-500 mr-2"></i>Daftar Produk
+              </h3>
+              <div id="productList" class="space-y-3">
+                <div class="product-item flex flex-col sm:flex-row gap-3">
+                  <input type="text" placeholder="Nama Produk" required class="produk-nama flex-1 bg-white border border-slate-200 rounded-xl py-2.5 px-4 outline-none focus:border-brand-500 transition-all">
+                  <input type="number" placeholder="Harga" required class="produk-harga w-full sm:w-40 bg-white border border-slate-200 rounded-xl py-2.5 px-4 outline-none focus:border-brand-500 transition-all">
+                </div>
+              </div>
+              <button type="button" id="btnAddProduct" class="mt-4 w-full py-3 bg-white border border-dashed border-slate-300 text-slate-500 rounded-xl hover:bg-slate-100 hover:text-brand-600 text-sm font-medium transition-all">
+                <i class="fa-solid fa-plus mr-1"></i> Tambah Produk
+              </button>
+            </div>
+
+            <div class="p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
+              <h3 class="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-3 mb-4 flex items-center">
+                <i class="fa-solid fa-comment-dots text-brand-500 mr-2"></i>Keterangan Tambahan
+              </h3>
+              <textarea id="keterangan" rows="3" placeholder="Tambahkan catatan singkat mengenai usaha Anda..." class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-brand-500 transition-all resize-none"></textarea>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-brand-600 text-white font-bold py-4 rounded-2xl hover:bg-brand-700 shadow-lg active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+              <span id="btnText">Kirim Data</span> <i id="btnIcon" class="fa-solid fa-paper-plane"></i>
+              <svg id="btnSpinner" class="hidden animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </button>
+        </form>
+        <div id="statusContainer" class="hidden mt-6 p-4 rounded-xl border flex items-center gap-3 transition-all">
+          <div id="statusIcon"></div><p id="statusText" class="text-sm font-medium"></p>
+        </div>
+      </div>
+
+      <!-- TAMPILAN: DATABASE TABLE -->
+      <div id="viewData" class="hidden animate-fade-in flex-1 flex flex-col h-full">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database text-brand-500 mr-2"></i>Direktori UMKM</h3>
+            <button onclick="loadData()" class="flex items-center text-xs bg-brand-50 text-brand-600 px-4 py-2 rounded-xl border border-brand-100 hover:bg-brand-100 transition-colors">
+                <i class="fa-solid fa-sync mr-2"></i> Refresh Data
+            </button>
+        </div>
+        
+        <div id="loadingData" class="flex-1 flex flex-col items-center justify-center py-20 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+            <div class="w-12 h-12 border-4 border-brand-100 border-t-brand-500 rounded-full animate-spin"></div>
+            <p id="loadingMsg" class="mt-4 text-slate-500 text-sm">Menyinkronkan dengan server...</p>
+        </div>
+
+        <div id="tableContainer" class="hidden flex-1 overflow-hidden border border-slate-200 rounded-2xl shadow-sm bg-white">
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-left text-sm whitespace-nowrap">
+                  <thead class="bg-slate-50 border-b border-slate-200">
+                      <tr>
+                          <th class="px-6 py-4 font-bold text-slate-700">Poster</th>
+                          <th class="px-6 py-4 font-bold text-slate-700">Nama Brand</th>
+                          <th class="px-6 py-4 font-bold text-slate-700">Produk</th>
+                          <th class="px-6 py-4 font-bold text-slate-700">Keterangan</th>
+                          <th class="px-6 py-4 font-bold text-slate-700 text-center">Aksi</th>
+                      </tr>
+                  </thead>
+                  <tbody id="tableBody" class="divide-y divide-slate-100 bg-white"></tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+
+    </div> 
+  </div> 
+
+  <script>
+    // URL API yang sudah terbukti berhasil
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxG8PTgshg1neXk7K6-tg4JWvzmGeW9ZMxrULP-KeqTjENHaP-YkP8j6wDi883yM5ZOLg/exec";
+
+    function switchTab(tab) {
+        const viewForm = document.getElementById('viewForm');
+        const viewData = document.getElementById('viewData');
+        const tabFormBtn = document.getElementById('tabFormBtn');
+        const tabDataBtn = document.getElementById('tabDataBtn');
+
+        if(tab === 'form') {
+            viewForm.classList.remove('hidden');
+            viewData.classList.add('hidden');
+            tabFormBtn.className = "px-6 py-2.5 rounded-lg text-sm font-semibold transition-all bg-white text-brand-600 shadow-sm";
+            tabDataBtn.className = "px-6 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-500 hover:text-slate-700";
+        } else {
+            viewForm.classList.add('hidden');
+            viewData.classList.remove('hidden');
+            tabDataBtn.className = "px-6 py-2.5 rounded-lg text-sm font-semibold transition-all bg-white text-brand-600 shadow-sm";
+            tabFormBtn.className = "px-6 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-500 hover:text-slate-700";
+            loadData();
+        }
+    }
+
+    async function loadData() {
+        const loadingDiv = document.getElementById('loadingData');
+        const tableContainer = document.getElementById('tableContainer');
+        const loadingMsg = document.getElementById('loadingMsg');
+        
+        loadingDiv.classList.remove('hidden');
+        tableContainer.classList.add('hidden');
+        loadingMsg.innerText = "Memuat data dari Google Sheets...";
+
+        try {
+            const res = await fetch(scriptURL);
+            const data = await res.json();
+            
+            if(data.error) throw new Error(data.error);
+
+            renderTable(data);
+        } catch (err) {
+            console.error("Fetch Error:", err);
+            loadingMsg.innerHTML = `
+              <div class="text-center p-4">
+                <p class="text-red-500 font-bold mb-2">Gagal Memuat Data</p>
+                <p class="text-xs text-slate-500 max-w-xs mx-auto">${err.message}</p>
+                <button onclick="loadData()" class="mt-4 px-4 py-2 bg-brand-600 text-white rounded-lg text-xs">Coba Lagi</button>
+              </div>
+            `;
+        }
+    }
+
+    function renderTable(data) {
+        const tableBody = document.getElementById('tableBody');
+        const loadingDiv = document.getElementById('loadingData');
+        const tableContainer = document.getElementById('tableContainer');
+        
+        tableBody.innerHTML = '';
+        
+        if (data && Array.isArray(data) && data.length > 0) {
+            data.slice().reverse().forEach(row => {
+                if(!row.namaUsaha) return;
+                
+                let waClean = String(row.whatsapp || "").replace(/\D/g, '');
+                if (waClean.startsWith('0')) waClean = '62' + waClean.substring(1);
+
+                // Tambahan: Mengecek apakah ada link foto yang dikembalikan dari database
+                // Asumsi: di Apps Script kita masukkan URL foto ke kolom 'foto' atau kolom H
+                let fotoElement = '<div class="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-slate-300"><i class="fa-solid fa-image"></i></div>';
+                if (row.foto && row.foto.startsWith("http")) {
+                    fotoElement = `<a href="${row.foto}" target="_blank">
+                                     <img src="${row.foto}" alt="Poster" class="w-12 h-12 object-cover rounded-lg border border-slate-200 hover:opacity-80 transition-opacity">
+                                   </a>`;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4">
+                        ${fotoElement}
+                    </td>
+                    <td class="px-6 py-4 font-bold text-slate-800">
+                        ${row.namaUsaha}
+                        <div class="text-[10px] text-slate-400 font-medium uppercase tracking-tighter mt-1">${row.namaPemilik || '-'}</div>
+                    </td>
+                    <td class="px-6 py-4 text-slate-600 max-w-xs truncate" title="${row.daftarProduk || '-'}">${row.daftarProduk || '-'}</td>
+                    <td class="px-6 py-4 text-slate-400 italic text-xs max-w-xs truncate" title="${row.keterangan || '-'}">${row.keterangan || '-'}</td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="https://wa.me/${waClean}" 
+                           target="_blank" 
+                           class="inline-flex items-center justify-center w-8 h-8 bg-green-50 text-green-600 rounded-full hover:bg-green-600 hover:text-white transition-all">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            loadingDiv.classList.add('hidden');
+            tableContainer.classList.remove('hidden');
+        } else {
+            document.getElementById('loadingMsg').innerText = "Belum ada data tersedia.";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const btnAddProduct = document.getElementById("btnAddProduct");
+      const productList = document.getElementById("productList");
+
+      btnAddProduct.addEventListener("click", () => {
+        const div = document.createElement("div");
+        div.className = "product-item flex flex-col sm:flex-row gap-3 animate-fade-in pt-3 border-t border-slate-100 sm:border-0";
+        div.innerHTML = `
+          <input type="text" placeholder="Nama Produk" required class="produk-nama flex-1 bg-white border border-slate-200 rounded-xl py-2.5 px-4 outline-none focus:border-brand-500 transition-all">
+          <input type="number" placeholder="Harga" required class="produk-harga w-full sm:w-40 bg-white border border-slate-200 rounded-xl py-2.5 px-4 outline-none focus:border-brand-500 transition-all">
+          <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600 px-3"><i class="fa-solid fa-trash-can"></i></button>
+        `;
+        productList.appendChild(div);
+      });
+
+      document.getElementById("produkForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const btnSubmit = document.getElementById("btnSubmit");
+        const btnText = document.getElementById("btnText");
+        const btnSpinner = document.getElementById("btnSpinner");
+        const statusContainer = document.getElementById("statusContainer");
+        const fileInput = document.getElementById("fotoPoster");
+
+        // Validasi Ukuran File (Maksimal 3MB)
+        if (fileInput.files.length > 0) {
+            const fileSize = fileInput.files[0].size / 1024 / 1024; // in MB
+            if (fileSize > 3) {
+                alert("Ukuran foto terlalu besar! Maksimal 3MB.");
+                return;
+            }
+        }
+
+        btnText.innerText = "Mengirim...";
+        btnSpinner.classList.remove("hidden");
+        btnSubmit.disabled = true;
+
+        // Mengambil Data Produk
+        let arrayProduk = [];
+        document.querySelectorAll(".product-item").forEach(item => {
+          const n = item.querySelector(".produk-nama").value;
+          const h = item.querySelector(".produk-harga").value;
+          if (n && h) {
+             arrayProduk.push(`${n} (Rp${parseInt(h).toLocaleString()})`);
+          }
+        });
+
+        // Setup base struktur data
+        const formData = {
+          namaUsaha: document.getElementById("namaUsaha").value,
+          namaPemilik: document.getElementById("namaPemilik").value,
+          whatsapp: document.getElementById("whatsapp").value,
+          kategori: document.getElementById("kategori").value,
+          daftarProduk: arrayProduk.join(", "),
+          keterangan: document.getElementById("keterangan").value,
+          fotoData: "",
+          fotoMimeType: "",
+          fotoNama: ""
+        };
+
+        try {
+         // Jika ada file foto, ubah menjadi Base64 string
+if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    formData.fotoNama = file.name;
+    formData.fotoMimeType = file.type;
+    
+    const base64String = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        // Gunakan pembersihan string agar formatnya standar
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+    
+    // Pastikan pemisahan koma berhasil sebelum mengambil index [1]
+    formData.fotoData = base64String.includes(',') ? base64String.split(',')[1] : base64String;
+}
+
+try {
+    // Gunakan URLSearchParams atau kirim sebagai string JSON murni
+    // Apps Script 'no-cors' lebih stabil menerima payload string murni
+    await fetch(scriptURL, {
+        method: "POST",
+        mode: 'no-cors', // Tetap gunakan no-cors untuk menghindari blokir browser
+        body: JSON.stringify(formData),
+        headers: { 
+            "Content-Type": "text/plain;charset=utf-8" 
+        }
+    });
+
+    // Berikan jeda sedikit sebelum refresh data karena 'no-cors' tidak menunggu respon server
+    setTimeout(() => {
+        statusContainer.className = "mt-6 p-4 rounded-xl border bg-green-50 border-green-200 text-green-700 animate-fade-in flex items-center gap-3";
+        document.getElementById("statusIcon").innerHTML = '<i class="fa-solid fa-circle-check text-lg"></i>';
+        document.getElementById("statusText").innerHTML = "<strong>Sukses!</strong> Data dan Foto sedang diproses ke Database.";
+        statusContainer.classList.remove("hidden");
+        document.getElementById("produkForm").reset();
+    }, 1500);
+
+} catch (err) {
+    console.error("Gagal mengirim:", err);
+}
+
+          statusContainer.className = "mt-6 p-4 rounded-xl border bg-green-50 border-green-200 text-green-700 animate-fade-in flex items-center gap-3";
+          document.getElementById("statusIcon").innerHTML = '<i class="fa-solid fa-circle-check text-lg"></i>';
+          document.getElementById("statusText").innerHTML = "<strong>Sukses!</strong> Data Anda telah dikirim. Silakan cek tab Database UMKM.";
+          statusContainer.classList.remove("hidden");
+          this.reset();
+        } catch (err) {
+          statusContainer.className = "mt-6 p-4 rounded-xl border bg-amber-50 border-amber-200 text-amber-700 flex items-center gap-3";
+          document.getElementById("statusText").innerText = "Data sedang diproses. Silakan refresh tab Database beberapa saat lagi.";
+          statusContainer.classList.remove("hidden");
+        } finally {
+          btnText.innerText = "Kirim Data";
+          btnSpinner.classList.add("hidden");
+          btnSubmit.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
